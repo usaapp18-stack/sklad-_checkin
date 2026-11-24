@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": "usr-admin-manager",
+      "login": "+79266137222",
+      "password_plain": "7222",
+      "password_hash": "y0.vC2kUo97bF5xSjW1dI7qK1vVvL5G6Wy",
+      "name": "Руководитель ПВЗ (Admin)",
+      "role": "manager",
+      "status": "active",
+      "is_part_time": false,
+      "is_senior": false,
+      "telegram_username": "David_Sha",
+      "locations": []
+    }
+  ],
+  "checkins": [],
+  "sales": [],
+  "messages": [],
+  "notifications": [],
+  "applications": [],
+  "bot_logs": [
+    {
+      "id": "log-init",
+      "timestamp": "2026-09-29T12:00:00+03:00",
+      "status": "SUCCESS",
+      "message": "База данных ПВЗ успешно инициализирована"
+    }
+  ],
+  "sessions": {}
+}

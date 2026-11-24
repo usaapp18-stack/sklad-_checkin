@@ -1,0 +1,1091 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  /* Unified SKLADIN Design Tokens: Crisp White, Obsidian Ink & Electric Cobalt */
+  --app-bg: #f7f9ff;
+  --app-card-bg: #ffffff;
+  --app-card-border: #d9dbe0;
+  --app-text-main: #111111;
+  --app-text-muted: #5d6270;
+  --app-accent-cobalt: #2f63ff;
+  --app-accent-cobalt-text: #1d4ed8;
+  --app-accent-amber: #d97706;
+}
+
+@layer base {
+  html {
+    overflow-x: clip;
+    max-width: 100%;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    overflow-x: clip;
+    overflow-y: auto;
+    max-width: 100%;
+    width: 100%;
+    font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--app-bg);
+    color: var(--app-text-main);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
+    padding-left: var(--sal);
+    padding-right: var(--sar);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  code, kbd, samp, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  button,
+  [role="button"],
+  select,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="button"],
+  input[type="submit"] {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* Global Keyboard Focus-Visible Accessibility Guarantee */
+:focus-visible {
+  outline: 2px solid var(--app-accent-cobalt);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--app-accent-cobalt);
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px rgba(47, 99, 255, 0.22);
+}
+
+.kv-pill:focus-visible,
+.kv-btn-primary:focus-visible,
+.kv-btn-outline:focus-visible {
+  outline: 2px solid #85a7ff;
+  outline-offset: 3px;
+}
+
+/* Prevent iOS Safari from involuntarily zooming in on form inputs when focused */
+@media screen and (max-width: 640px) {
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"],
+  input[type="date"],
+  input[type="month"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth momentum scrolling */
+.overflow-y-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Native Calendar / Date Picker Popover Styles (Light Theme) */
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime-local"] {
+  background-color: var(--app-card-bg);
+  color: var(--app-text-main);
+  border-color: var(--app-card-border);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 6px;
+  filter: none;
+  transition: background-color 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="month"]::-webkit-calendar-picker-indicator:hover {
+  background-color: rgba(47, 99, 255, 0.14);
+}
+
+/* Custom Light Scrollbar Styles */
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: #f5f7fc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: #d9dbe0;
+  border: 1px solid #c7ccd6;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: #5d6270;
+  border-color: #5d6270;
+}
+
+::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: #2f63ff;
+  border-color: #2f63ff;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: #f7f9ff;
+}
+
+@supports (-moz-appearance: none) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d9dbe0 #f5f7fc;
+  }
+}
+
+/* ============================================================================
+   SKLADIN Landing Experience: Globe Hero, Horizon Glow, Pinned Stats, Services Scroll Scene
+   ============================================================================ */
+:root {
+  --kv-ink: #111111;
+  --kv-white: #ffffff;
+  --kv-cobalt: #2f63ff;
+  --kv-cobalt-hover: #1f4fe0;
+  --kv-muted: #5d6270;
+  --kv-muted-2: #6b6f78;
+  --kv-wash: #eef2ff;
+  --kv-periwinkle: #a9bcff;
+  --kv-giant: #e9e9e9;
+  --kv-hairline: #d9dbe0;
+
+  --uc: 1px;
+  --uv: 1px;
+  --us: 1px;
+  --u: 1px;
+  --edge-px: 45vh;
+  --ph: 0;
+  --hl: 1;
+}
+
+.kv-page {
+  position: relative;
+  background: var(--kv-white);
+  color: var(--kv-ink);
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+html.js-anim .kv-ent {
+  opacity: 0;
+}
+
+html.anim-done .kv-ent {
+  opacity: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kv-ent {
+    opacity: 1 !important;
+  }
+}
+
+.kv-font-display {
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+}
+
+.kv-font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* --- Section 1: Globe Hero --- */
+.kv-hwrap {
+  position: relative;
+  z-index: 1;
+  height: 140vh;
+  background: var(--kv-white);
+}
+
+.kv-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  background: var(--kv-white);
+  overflow: hidden;
+  z-index: 1;
+}
+
+html.sticky .kv-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.kv-gwrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.kv-globe-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kv-hf {
+  position: absolute;
+  left: 0;
+  width: calc(1440 * var(--uc));
+  height: calc(900 * var(--uc));
+  z-index: 2;
+}
+
+.kv-logo {
+  position: absolute;
+  left: calc(40 * var(--uc));
+  top: calc(36 * var(--uc));
+  display: inline-flex;
+  align-items: center;
+  gap: calc(9 * var(--uc));
+  color: var(--kv-ink);
+  text-decoration: none;
+}
+
+.kv-logo-mark {
+  width: calc(30 * var(--uc));
+  height: calc(30 * var(--uc));
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.kv-logo-word {
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  font-size: calc(28 * var(--uc));
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.kv-vnav {
+  position: absolute;
+  left: calc(218 * var(--uc));
+  top: calc(77 * var(--uc));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kv-vnav-link {
+  display: inline-block;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-size: max(calc(13 * var(--uc)), 11px);
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--kv-ink);
+  padding: calc(6.1 * var(--uc)) 0;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.kv-vnav-link:hover,
+.kv-vnav-link:focus-visible {
+  color: var(--kv-cobalt);
+}
+
+.kv-copy {
+  position: absolute;
+  left: calc(120 * var(--uc));
+  top: calc(210 * var(--uc));
+  width: calc(700 * var(--uc));
+}
+
+.kv-overline {
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: max(calc(19.2 * var(--uc)), 12px);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  color: var(--kv-cobalt);
+}
+
+.kv-hl {
+  margin-top: calc(7 * var(--uc));
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: calc(104 * var(--uc));
+  line-height: 0.96;
+  letter-spacing: -0.004em;
+  color: var(--kv-ink);
+}
+
+.kv-ln {
+  display: block;
+  white-space: nowrap;
+  will-change: transform, opacity, clip-path;
+}
+
+.kv-lede {
+  margin-top: calc(21 * var(--uc));
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: max(calc(18.2 * var(--uc)), 13px);
+  line-height: 1.45;
+  color: var(--kv-muted);
+  max-width: max(calc(440 * var(--uc)), 260px);
+}
+
+.kv-btns {
+  margin-top: calc(19 * var(--uc));
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(15 * var(--uc));
+  align-items: center;
+}
+
+.kv-btn-primary,
+.kv-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: max(calc(40 * var(--uc)), 36px);
+  padding: 0 max(calc(25 * var(--uc)), 16px);
+  border-radius: 999px;
+  border: 1.3px solid var(--kv-cobalt);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 500;
+  font-size: max(calc(12 * var(--uc)), 11px);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.kv-btn-primary {
+  background: var(--kv-cobalt);
+  color: var(--kv-white);
+}
+
+.kv-btn-primary:hover {
+  background: var(--kv-cobalt-hover);
+  border-color: var(--kv-cobalt-hover);
+}
+
+.kv-btn-outline {
+  background: transparent;
+  color: var(--kv-cobalt);
+}
+
+.kv-btn-outline:hover {
+  background: var(--kv-cobalt);
+  color: var(--kv-white);
+}
+
+/* Portrait Hero (mobile & portrait tablets) */
+html.m-port .kv-hwrap {
+  height: auto;
+}
+
+html.m-port .kv-hero {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+html.m-port .kv-hf {
+  position: relative;
+  top: 0 !important;
+  width: 100%;
+  height: auto;
+  padding: 22px 22px 0;
+}
+
+html.m-port .kv-logo {
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+html.m-port .kv-logo-mark {
+  width: 24px;
+  height: 24px;
+}
+
+html.m-port .kv-logo-word {
+  font-size: 22px;
+}
+
+html.m-port .kv-vnav {
+  position: absolute;
+  left: auto;
+  right: 22px;
+  top: 20px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+html.m-port .kv-vnav-link {
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+html.m-port .kv-copy {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  margin-top: clamp(24px, 5vh, 56px);
+}
+
+html.m-port .kv-overline {
+  font-size: 14px;
+}
+
+html.m-port .kv-hl {
+  margin-top: 12px;
+  font-size: min(17vw, 118px);
+  line-height: 0.96;
+}
+
+html.m-port .kv-lede {
+  margin-top: 20px;
+  font-size: 15px;
+  max-width: 420px;
+}
+
+html.m-port .kv-btns {
+  margin-top: 20px;
+  gap: 10px;
+}
+
+html.m-port .kv-btn-primary,
+html.m-port .kv-btn-outline {
+  height: 44px;
+  padding: 0 20px;
+  font-size: 11px;
+}
+
+html.m-port .kv-gwrap {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 98vw;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+/* Short Landscape Hero */
+html.m-land .kv-hwrap {
+  height: auto;
+}
+
+html.m-land .kv-hero {
+  position: relative;
+}
+
+/* --- Horizon Glow Transition --- */
+.kv-hz {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: none;
+}
+
+/* --- Section 2: Pinned Stats (#about) --- */
+.kv-stats {
+  position: relative;
+  z-index: 3;
+  background: transparent;
+}
+
+.kv-pin {
+  position: sticky;
+  top: min(64px, calc(100vh - 900 * var(--us)));
+  height: calc(900 * var(--us));
+  z-index: 1;
+  pointer-events: none;
+}
+
+.kv-ph {
+  position: absolute;
+  left: calc(64 * var(--us));
+  top: calc(64 * var(--us));
+  width: calc(440 * var(--us));
+  height: calc(256 * var(--us));
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f0f5ff;
+  border: 1px solid #d9dbe0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.kv-ph.is-revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+.kv-ph > i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: 50% 50% / cover no-repeat;
+  transform: scale(1.12);
+  transition: transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kv-ph.is-revealed > i {
+  transform: scale(1);
+}
+
+.kv-big {
+  position: absolute;
+  left: calc(64 * var(--us));
+  top: calc(383 * var(--us));
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: calc(88 * var(--us));
+  line-height: 1;
+  letter-spacing: 0.015em;
+  color: var(--kv-ink);
+}
+
+.kv-col {
+  position: relative;
+  margin-top: calc(-900 * var(--us));
+  height: calc((371 + 5 * 166 + 60) * var(--us));
+  z-index: 2;
+}
+
+.kv-intro {
+  position: absolute;
+  left: calc(594 * var(--us));
+  top: calc(117 * var(--us));
+  width: calc(440 * var(--us));
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: max(calc(17.9 * var(--us)), 12.5px);
+  line-height: 1.38;
+  color: var(--kv-muted-2);
+}
+
+.kv-intro p + p {
+  margin-top: calc(24 * var(--us));
+}
+
+.kv-intro-links {
+  margin-top: calc(22 * var(--us));
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(26 * var(--us));
+}
+
+.kv-intro-link {
+  color: var(--kv-ink);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+  transition: color 0.2s ease;
+}
+
+.kv-intro-link:hover {
+  color: var(--kv-cobalt);
+}
+
+.kv-nums {
+  position: absolute;
+  left: calc(993 * var(--us));
+  top: calc(371 * var(--us));
+  width: calc(384 * var(--us));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-stat-li {
+  position: relative;
+  height: calc(166 * var(--us));
+}
+
+.kv-stat-li + .kv-stat-li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-16 * var(--us));
+  height: 1px;
+  background: var(--kv-hairline);
+  transform-origin: left center;
+  transform: scaleX(var(--hl, 1));
+}
+
+.kv-stat-n {
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  font-size: calc(82 * var(--us));
+  line-height: 1;
+  color: var(--kv-cobalt);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.kv-stat-c {
+  margin-top: calc(6 * var(--us));
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: max(calc(17 * var(--us)), 11.5px);
+  line-height: 1.35;
+  color: var(--kv-muted-2);
+}
+
+/* Stats Mobile / Portrait / Short Landscape */
+html.m-port .kv-stats,
+html.m-land .kv-stats {
+  padding: 56px 22px 72px;
+  display: flex;
+  flex-direction: column;
+}
+
+html.m-port .kv-pin,
+html.m-port .kv-col,
+html.m-land .kv-pin,
+html.m-land .kv-col {
+  display: contents;
+}
+
+html.m-port .kv-ph,
+html.m-land .kv-ph {
+  position: relative;
+  left: 0;
+  top: 0;
+  order: 1;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  aspect-ratio: 440 / 236;
+}
+
+html.m-port .kv-intro,
+html.m-land .kv-intro {
+  position: relative;
+  left: 0;
+  top: 0;
+  order: 2;
+  width: 100%;
+  max-width: 520px;
+  font-size: 15px;
+  margin-top: 28px;
+}
+
+html.m-port .kv-intro p + p,
+html.m-land .kv-intro p + p {
+  margin-top: 16px;
+}
+
+html.m-port .kv-intro-links,
+html.m-land .kv-intro-links {
+  margin-top: 18px;
+  gap: 20px;
+}
+
+html.m-port .kv-big,
+html.m-land .kv-big {
+  position: relative;
+  left: 0;
+  top: 0;
+  order: 3;
+  margin-top: 48px;
+  font-size: min(13.5vw, 96px);
+}
+
+html.m-port .kv-nums,
+html.m-land .kv-nums {
+  position: relative;
+  left: 0;
+  top: 0;
+  order: 4;
+  width: 100%;
+  margin-top: 44px;
+}
+
+html.m-port .kv-stat-li,
+html.m-land .kv-stat-li {
+  height: auto;
+  padding: 18px 0;
+  border-top: 1px solid var(--kv-hairline);
+}
+
+html.m-port .kv-stat-li + .kv-stat-li::before,
+html.m-land .kv-stat-li + .kv-stat-li::before {
+  display: none;
+}
+
+html.m-port .kv-stat-n,
+html.m-land .kv-stat-n {
+  font-size: min(17vw, 88px);
+}
+
+html.m-port .kv-stat-c,
+html.m-land .kv-stat-c {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* --- Section 3: Services Scroll Scene --- */
+.kv-track {
+  position: relative;
+  z-index: 4;
+  background: var(--kv-white);
+}
+
+.kv-scene {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #ffffff var(--video-split, 85%),
+    #111111 var(--video-split, 85%),
+    #111111 100%
+  );
+}
+
+.kv-video {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.kv-giant {
+  position: absolute;
+  left: 0;
+  top: calc(var(--edge-px) - 264 * var(--u));
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-size: calc(330 * var(--u));
+  line-height: 0.8;
+  color: var(--kv-giant);
+  white-space: nowrap;
+  text-transform: uppercase;
+  mix-blend-mode: darken;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.kv-speed {
+  position: absolute;
+  left: calc(26 * var(--u));
+  top: calc(52 * var(--u));
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-size: calc(10.5 * var(--u));
+  letter-spacing: 0.06em;
+  color: var(--kv-ink);
+  font-variant-numeric: tabular-nums;
+  opacity: var(--ph, 0);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.kv-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--edge-px);
+  bottom: 0;
+  color: var(--kv-white);
+  overflow: hidden;
+}
+
+.kv-strip {
+  position: absolute;
+  left: 0;
+  top: calc(76 * var(--u));
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: calc(120 * var(--u));
+  will-change: transform;
+}
+
+.kv-lead {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: calc(64 * var(--u));
+  flex-shrink: 0;
+}
+
+.kv-lead-hl {
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  font-size: calc(56 * var(--u));
+  line-height: 0.98;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--kv-white);
+}
+
+.kv-lead-hl-accent {
+  color: var(--kv-cobalt);
+  display: block;
+}
+
+.kv-lead-copy {
+  width: calc(260 * var(--u));
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: calc(12 * var(--u));
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.kv-lead-copy p + p {
+  margin-top: 1em;
+}
+
+.kv-card {
+  width: calc(270 * var(--u));
+  padding: 0 calc(30 * var(--u));
+  flex-shrink: 0;
+}
+
+.kv-card + .kv-card {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.kv-card-icon {
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
+  color: var(--kv-white);
+}
+
+.kv-card-title {
+  margin-top: calc(22 * var(--u));
+  font-family: 'Anton', 'Oswald', Impact, sans-serif;
+  font-weight: 700;
+  font-size: calc(24 * var(--u));
+  line-height: 1.05;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff calc(var(--sweep, 160%) - 34%),
+    #2f63ff calc(var(--sweep, 160%) - 6%),
+    transparent calc(var(--sweep, 160%) + 26%)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.kv-card-body {
+  margin-top: calc(14 * var(--u));
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: calc(12.4 * var(--u));
+  line-height: 1.5;
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.85) calc(var(--sweep, 160%) - 34%),
+    #2f63ff calc(var(--sweep, 160%) - 6%),
+    transparent calc(var(--sweep, 160%) + 26%)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.kv-pill {
+  position: absolute;
+  left: 50%;
+  bottom: calc(36 * var(--u));
+  transform: translate(-50%, calc((1 - var(--ph, 0)) * 24px));
+  opacity: var(--ph, 0);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 0.2s ease,
+    color 0.2s ease;
+  padding: calc(11 * var(--u)) calc(22 * var(--u));
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: max(calc(10 * var(--u)), 10px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kv-white);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.kv-pill:hover {
+  background: var(--kv-white);
+  color: var(--kv-ink);
+}
+
+/* Services Phone Framing (m-hp) */
+html.m-hp .kv-strip {
+  top: calc(44 * var(--u));
+  gap: calc(56 * var(--u));
+  padding-left: 22px;
+}
+
+html.m-hp .kv-lead {
+  flex-direction: column;
+  gap: calc(18 * var(--u));
+}
+
+html.m-hp .kv-lead-hl {
+  font-size: calc(42 * var(--u));
+}
+
+html.m-hp .kv-lead-copy {
+  width: calc(300 * var(--u));
+  font-size: calc(13 * var(--u));
+}
+
+html.m-hp .kv-card {
+  width: calc(250 * var(--u));
+}
+
+html.m-hp .kv-card-body {
+  font-size: calc(13 * var(--u));
+}
+
+html.m-hp .kv-speed {
+  left: 20px;
+  top: 22px;
+  font-size: 11px;
+}
+
+/* Services Short Landscape Phone (m-land) */
+html.m-land .kv-strip {
+  top: calc(14 * var(--u));
+  gap: calc(48 * var(--u));
+}
+
+html.m-land .kv-lead {
+  flex-direction: row;
+  gap: calc(28 * var(--u));
+}
+
+html.m-land .kv-lead-hl {
+  font-size: calc(32 * var(--u));
+}
+
+html.m-land .kv-lead-copy {
+  width: calc(230 * var(--u));
+  font-size: max(calc(12 * var(--u)), 10px);
+}
+
+html.m-land .kv-card {
+  width: calc(240 * var(--u));
+}
+
+html.m-land .kv-card-icon {
+  width: calc(30 * var(--u));
+  height: calc(30 * var(--u));
+}
+
+html.m-land .kv-card-title {
+  margin-top: calc(12 * var(--u));
+  font-size: calc(20 * var(--u));
+}
+
+html.m-land .kv-card-body {
+  font-size: max(calc(12 * var(--u)), 10px);
+}
+
+html.m-land .kv-pill {
+  bottom: calc(12 * var(--u));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kv-speed,
+  .kv-pill {
+    transition: none;
+  }
+  .kv-ph {
+    clip-path: inset(0 0 0 0);
+    transition: none;
+  }
+  .kv-ph > i {
+    transform: scale(1);
+    transition: none;
+  }
+  .kv-card-title,
+  .kv-card-body {
+    --sweep: 160%;
+  }
+}
+
+/* Lower Product Showcase & Footer Section */
+.kv-after-track {
+  position: relative;
+  z-index: 5;
+  background: var(--kv-white);
+  border-top: 1px solid #e5e7eb;
+}
+

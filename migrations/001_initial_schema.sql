@@ -1,0 +1,135 @@
+-- Migration 001: Initial schema for PVZ CheckBot
+
+CREATE TABLE IF NOT EXISTS schema_migrations (
+    id SERIAL PRIMARY KEY,
+    version VARCHAR(50) UNIQUE NOT NULL,
+    applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS locations (
+    id VARCHAR(50) PRIMARY KEY,
+    code VARCHAR(10) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR(50) PRIMARY KEY,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'employee',
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+    is_part_time BOOLEAN DEFAULT FALSE,
+    is_senior BOOLEAN DEFAULT FALSE,
+    telegram_username VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_locations (
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    location_id VARCHAR(50) NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, location_id)
+);
+
+CREATE TABLE IF NOT EXISTS checkins (
+    id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    location_code VARCHAR(10) NOT NULL,
+    shift_type VARCHAR(30) NOT NULL DEFAULT 'standard',
+    date VARCHAR(10) NOT NULL,
+    checked_in_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    notes TEXT,
+    CONSTRAINT uq_user_date UNIQUE (user_id, date)
+);
+
+CREATE TABLE IF NOT EXISTS sales (
+    id VARCHAR(50) PRIMARY KEY,
+    checkin_id VARCHAR(50) UNIQUE NOT NULL REFERENCES checkins(id) ON DELETE RESTRICT,
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    date VARCHAR(10) NOT NULL,
+    photo_cash NUMERIC(10, 2) DEFAULT 0.00,
+    photo_card NUMERIC(10, 2) DEFAULT 0.00,
+    print_cash NUMERIC(10, 2) DEFAULT 0.00,
+    print_card NUMERIC(10, 2) DEFAULT 0.00,
+    lamination_cash NUMERIC(10, 2) DEFAULT 0.00,
+    lamination_card NUMERIC(10, 2) DEFAULT 0.00,
+    total NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    bonus NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id VARCHAR(50) PRIMARY KEY,
+    from_user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(50) REFERENCES users(id) ON DELETE CASCADE,
+    to_all BOOLEAN DEFAULT FALSE,
+    title VARCHAR(200) NOT NULL,
+    text TEXT NOT NULL,
+    type VARCHAR(30) NOT NULL DEFAULT 'system',
+    location VARCHAR(10),
+    source VARCHAR(50),
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS applications (
+    id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    telegram_username VARCHAR(100),
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    note TEXT,
+    assigned_login VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bot_logs (
+    id VARCHAR(50) PRIMARY KEY,
+    action VARCHAR(50) NOT NULL,
+    initiated_by VARCHAR(100) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    details TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(50) REFERENCES users(id) ON DELETE SET NULL,
+    action VARCHAR(50) NOT NULL,
+    entity VARCHAR(50) NOT NULL,
+    entity_id VARCHAR(100),
+    ip VARCHAR(45),
+    user_agent TEXT,
+    details TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+    id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) UNIQUE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+    key VARCHAR(50) PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_login ON users(login);
+CREATE INDEX IF NOT EXISTS idx_checkins_date ON checkins(date);
+CREATE INDEX IF NOT EXISTS idx_checkins_user ON checkins(user_id);
+CREATE INDEX IF NOT EXISTS idx_sales_date ON sales(date);
+CREATE INDEX IF NOT EXISTS idx_sessions_hash ON sessions(token_hash);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);

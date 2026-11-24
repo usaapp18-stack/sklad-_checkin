@@ -1,0 +1,32 @@
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 0. Передача HTTP Authorization заголовка в PHP (для FastCGI/PHP-FPM на Beget)
+  SetEnvIfNoCase ^Authorization$ "(.+)" HTTP_AUTHORIZATION=$1
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  # 1. Защита конфига, базы данных, резервных копий и системных файлов (HTTP 403 Forbidden)
+  RewriteRule ^config\.php$ - [F,L]
+  RewriteRule ^pvz_database\.json$ - [F,L]
+  RewriteRule ^db\.json$ - [F,L]
+  RewriteRule ^data/ - [F,L]
+  RewriteRule ^backups/ - [F,L]
+  RewriteRule ^\.env.* - [F,L]
+  RewriteRule ^\.git.* - [F,L]
+  RewriteRule ^(.*)\.(db|sqlite|log|sql|bak|py|ts)$ - [F,L]
+
+  # 2. Направление всех /api/* запросов в api.php
+  RewriteRule ^api/(.*)$ api.php?__route__=$1 [L,QSA]
+  RewriteRule ^api.php$ - [L]
+
+  # 3. Существующие статические файлы и папки отдавать напрямую
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 4. Single Page Application роутинг на index.html
+  RewriteRule ^ index.html [L]
+</IfModule>

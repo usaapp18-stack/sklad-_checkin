@@ -8,25 +8,32 @@ DirectoryIndex index.html
   SetEnvIfNoCase ^Authorization$ "(.+)" HTTP_AUTHORIZATION=$1
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-  # 1. Защита конфига, базы данных, резервных копий и системных файлов (HTTP 403 Forbidden)
+  # 1. Защита конфига, PHP-модулей, базы данных и системных файлов (HTTP 403 Forbidden)
   RewriteRule ^config\.php$ - [F,L]
-  RewriteRule ^pvz_database\.json$ - [F,L]
-  RewriteRule ^db\.json$ - [F,L]
+  RewriteRule ^config\.example\.php$ - [F,L]
+  RewriteRule ^php_api/ - [F,L]
   RewriteRule ^data/ - [F,L]
   RewriteRule ^backups/ - [F,L]
+  RewriteRule ^pvz_database\.json$ - [F,L]
+  RewriteRule ^db\.json$ - [F,L]
   RewriteRule ^\.env.* - [F,L]
   RewriteRule ^\.git.* - [F,L]
-  RewriteRule ^(.*)\.(db|sqlite|log|sql|bak|py|ts)$ - [F,L]
+  RewriteRule ^(.*)\.(db|sqlite|sqlite-wal|sqlite-shm|log|sql|bak|py|ts)$ - [F,L]
 
-  # 2. Направление всех /api/* запросов в api.php
+  # 2. SEO-файлы и health-check через PHP API
+  RewriteRule ^robots\.txt$ api.php?__route__=v1/public/robots [L,QSA]
+  RewriteRule ^sitemap\.xml$ api.php?__route__=v1/public/sitemap [L,QSA]
+  RewriteRule ^health$ api.php?__route__=v1/health [L,QSA]
+
+  # 3. Направление всех /api/* запросов в api.php
   RewriteRule ^api/(.*)$ api.php?__route__=$1 [L,QSA]
-  RewriteRule ^api.php$ - [L]
+  RewriteRule ^api\.php$ - [L]
 
-  # 3. Существующие статические файлы и папки отдавать напрямую
+  # 4. Существующие статические файлы и папки отдавать напрямую
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # 4. Single Page Application роутинг на index.html
+  # 5. Single Page Application роутинг на index.html
   RewriteRule ^ index.html [L]
 </IfModule>
